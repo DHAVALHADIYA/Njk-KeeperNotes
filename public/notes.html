@@ -15,7 +15,7 @@
       left: 0;
       top: 0;
       width: 100%;
-      height: 250vh;
+      height: 350vh;
       z-index: -1;
       opacity: 0.9;
     }
@@ -53,29 +53,26 @@
         margin-top: 10%;
       }
 
-      #successsignup {
+      #notedisplay {
+        top: 7%;
+        width: 80%;
+      }
+
+      #successnote,
+      #dangernotes {
         display: none;
         position: relative;
         left: -20%;
-        top: 4rem;
-        width: 80%;
+        top: 3rem;
+        width: 60%;
         animation: rtol;
         animation-duration: 1s;
         animation-delay: 0.12s;
         animation-timing-function: linear;
         transition: all 100s;
-        animation-fill-mode: forwards ;
+        animation-fill-mode: forwards;
       }
 
-      #dangersignup {
-        top: 4rem;
-        width: 50%;
-      }
-
-      #notedisplay {
-        top: 7%;
-        width: 80%;
-      }
     }
   </style>
 </head>
@@ -108,8 +105,8 @@
 
   <div class="alert alert-success text-center" id="successnote">
   </div>
-  <!-- <div class="alert alert-danger text-center" id="dangernotes">
-  </div> -->
+  <div class="alert alert-danger text-center" id="dangernotes">
+  </div>
   <div class="container" id="notedisplay">
     <h1 class="my-4 text-center">your notes</h1>
     <div class="mynotes row">
@@ -135,6 +132,8 @@
       return rdata;
     }
 
+    const dangernotes = document.getElementById("dangernotes");
+
     // fetch all the notes here 
     const fetchnotes = () => {
       const user = JSON.parse(localStorage.getItem("user"));
@@ -159,8 +158,8 @@
         });
       }
       else {
-        successnotes.innerText = "you are not valid user please login first";
-        successnotes.style.display = "block";
+        dangernotes.innerText = "you are not valid user please login first";
+        dangernotes.style.display = "block";
         window.location = "/login";
       }
 
@@ -203,7 +202,11 @@
         fetchnotes();
       }
       else {
-        alert(res.message);
+        dangernotes.innerText = res.message;
+        dangernotes.style.display = "block";
+        setTimeout(() => {
+          dangernotes.style.display = "none";
+        }, 3000);
       }
     });
 

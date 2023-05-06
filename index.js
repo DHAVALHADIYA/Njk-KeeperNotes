@@ -106,9 +106,9 @@ app.post("/signup", async (req, res) => {
       res.status(200).json({
         success: false,
         message:
-          "password is " +
+          "pass is " +
           checkpass +
-          " please set a strong password which contain lowercase , uppercase , number and special charactor",
+          "set strong pass which has lower & upper case, number & special char",
       });
     }
   } catch (err) {

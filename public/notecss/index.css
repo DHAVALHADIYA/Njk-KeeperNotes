@@ -138,7 +138,7 @@ body {
   animation-fill-mode: forwards;
 }
 
-#dangerlogin {
+#dangerlogin , #dangernotes {
   display: none;
   position: relative;
   left: -20%;
@@ -359,7 +359,7 @@ body {
 #allinfor {
   display: flex;
   flex-direction: column;
-  width: 78%;
+  width: 90%;
   margin-top: 15px;
 }
 
