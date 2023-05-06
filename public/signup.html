@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="./notecss/index.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <title>SignUp | NoteBook</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body::before {
+      content: "";
+      background: url(./notecss/bg.jpg) no-repeat center/cover;
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100vh;
+      z-index: -1;
+      opacity: 1;
+    }
+
+    @media screen and (max-width: 500px) {
+
+      #mynotes {
+        text-align: center;
+        width: 30%;
+        padding: 10px;
+        font-size: 20px;
+        margin: 0 30px;
+      }
+
+      #signupbtn {
+        width: 100%;
+      }
+
+      #signupform {
+        width: 95%;
+        top: 5%;
+        padding: 1%;
+      }
+
+      #signuplogo {
+        width: 45%;
+      }
+
+      #allinfor #submit {
+        width: 35%;
+      }
+
+      #successsignup {
+        display: none;
+        position: relative;
+        left: -20%;
+        top: 4rem;
+        width: 80%;
+        animation: rtol;
+        animation-duration: 1s;
+        animation-delay: 0.12s;
+        animation-timing-function: linear;
+        transition: all 100s;
+        animation-fill-mode: forwards;
+      }
+
+      #dangersignup {
+        top: 4rem;
+        width: 50%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="nav">
+    <div class="container-fluid">
+      <a class="navbar-brand" id="mynotes" href="#">mynotes</a>
+      <div class="d-flex" id="log">
+        <a href="/login"><button class="btn btn-outline-success mx-2 " id="signupbtn" type="submit">Login</button></a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container" id="signupform">
+    <i class="fa-solid fa-user-plus" id="signuplogo"></i>
+    <div id="allinfor">
+      <label for="name" class="form-label">Your Name<span class="impstar">*</span></label>
+      <div class="mb-3" id="namefonts">
+        <input type="text" class="form-control" id="name" name="name">
+        <i class="fa-solid fa-user"></i>
+      </div>
+      <label for="email" class="form-label">Email address<span class="impstar">*</span></label>
+      <div class="mb-3" id="emailfonts">
+        <input type="email" class="form-control" id="email" aria-describedby="emailHelp" name="email">
+        <i class="fa-sharp fa-regular fa-envelope"></i>
+      </div>
+      <label for="password" class="form-label">Password<span class="impstar">*</span></label>
+      <div class="mb-3" id="passfonts">
+        <input type="password" class="form-control" id="password" name="password">
+        <i class="fa-solid fa-lock"></i>
+      </div>
+      <label for="cpassword" class="form-label">Confirm Password<span class="impstar">*</span></label>
+      <div class="mb-3" id="cpassfonts">
+        <input type="password" class="form-control" id="cpassword" name="cpassword">
+        <i class="fa-solid fa-lock"></i>
+      </div>
+      <button id="submit" type="submit" class="btn btn-primary">Sign Up</button>
+    </div>
+  </div>
+
+  <div class="alert alert-success text-center" id="successsignup">
+    congratulation signup succesfull..
+  </div>
+
+  <div class="alert alert-danger text-center" id="dangersignup">
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    const submit = document.getElementById("submit");
+    const successsignup = document.getElementById("successsignup");
+    const dangersignup = document.getElementById("dangersignup");
+
+    // here fetch api is used for pass data and get data
+    async function postData(url = "", data = {}) {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        redirect: "follow",
+        referrerPolicy: "no-referrer",
+        body: JSON.stringify(data),
+      });
+      let rdata = await response.json();
+      return rdata;
+    }
+
+    // submit user clientInformation 
+    submit.addEventListener("click", async () => {
+      const name = document.getElementById("name").value;
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      const cpassword = document.getElementById("cpassword").value;
+
+      if (name.length != 0 && email.length != 0 && password.length != 0 && cpassword.length != 0) {
+        let res = await postData("/signup", { name, email, password, cpassword });
+        if (res.success) {
+          successsignup.style.display = "block";
+          localStorage.setItem("user", JSON.stringify(res.user));
+          document.getElementById("name").value = "";
+          document.getElementById("email").value = "";
+          document.getElementById("password").value = "";
+          document.getElementById("cpassword").value = "";
+          setTimeout(() => {
+            window.location.href = 'notes.html';
+          }, 3000);
+        }
+        else {
+          dangersignup.innerText = res.message;
+          dangersignup.style.display = "block";
+          setTimeout(() => {
+            dangersignup.style.display = "none";
+          }, 5000);
+        }
+      }
+      else {
+        dangersignup.innerText = "fill all the details";
+        dangersignup.style.display = "block";
+        setTimeout(() => {
+          dangersignup.style.display = "none";
+        }, 3000);
+      }
+    });
+
+  </script>
+
+</body>
+</html>

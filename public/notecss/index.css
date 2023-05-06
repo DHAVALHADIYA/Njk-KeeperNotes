@@ -1,0 +1,519 @@
+/* here all the css for login , notes , signup page  */
+
+* {
+  left: 0;
+  top: 0;
+  padding: 0;
+  margin: 0;
+  font-family: "poppins", sans-serif;
+  box-sizing: border-box;
+}
+
+body {
+  text-transform: capitalize;
+  overflow-x: hidden;
+  height: 100vh;
+}
+
+#nav {
+  width: 100%;
+  z-index: 1;
+  opacity: 0.7;
+}
+
+#home {
+  padding: 12px;
+  width: 100px;
+  text-align: center;
+  border-radius: 20px;
+  background-color: bisque;
+  color: black;
+  font-weight: bold;
+}
+
+#boxs {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+#mynotes {
+  padding: 13px;
+  font-size: 25px;
+  margin: 0 50px;
+  animation: updown;
+  animation-iteration-count: infinite;
+  animation-duration: 3.5s;
+  animation-delay: 0.5s;
+  animation-timing-function: linear;
+}
+
+/* this is animation for bar  */
+@keyframes updown {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  25% {
+    transform: rotate(5deg);
+  }
+
+  50% {
+    transform: rotate(0deg);
+  }
+
+  75% {
+    transform: rotate(-5deg);
+  }
+
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+#notebooks,
+#signupform {
+  width: 40%;
+}
+
+#submit {
+  display: block;
+  margin: auto;
+}
+
+#successlogin {
+  display: none;
+  position: relative;
+  left: 100%;
+  top: -1rem;
+  width: 20%;
+  animation: ltor;
+  animation-duration: 1s;
+  animation-delay: 0.12s;
+  animation-timing-function: linear;
+  transition: all 100s;
+  animation-fill-mode: forwards;
+}
+
+#successsignup {
+  display: none;
+  position: relative;
+  left: 100%;
+  top: -6rem;
+  width: 20%;
+  animation: ltor;
+  animation-duration: 1s;
+  animation-delay: 0.12s;
+  animation-timing-function: linear;
+  transition: all 100s;
+  animation-fill-mode: forwards;
+}
+
+#successnote {
+  display: none;
+  position: relative;
+  left: 100%;
+  top: -1rem;
+  width: 20%;
+  animation: ltor;
+  animation-duration: 1s;
+  animation-delay: 0.12s;
+  animation-timing-function: linear;
+  transition: all 100s;
+  animation-fill-mode: forwards;
+}
+
+#dangersignup {
+  display: none;
+  position: relative;
+  left: -20%;
+  top: -6rem;
+  width: 20%;
+  animation: rtol;
+  animation-duration: 1.5s;
+  animation-delay: 0.12s;
+  animation-timing-function: linear;
+  transition: all 100s;
+  animation-fill-mode: forwards;
+}
+
+#dangerlogin {
+  display: none;
+  position: relative;
+  left: -20%;
+  top: -1rem;
+  width: 20%;
+  animation: rtol;
+  animation-duration: 1s;
+  animation-delay: 0.12s;
+  animation-timing-function: linear;
+  transition: all 100s;
+  animation-fill-mode: forwards;
+}
+
+/* this is animation for sucess message  */
+@keyframes rtol {
+  0% {
+    left: -20%;
+  }
+
+  10% {
+    left: -18%;
+  }
+
+  20% {
+    left: -16%;
+  }
+
+  30% {
+    left: -14%;
+  }
+
+  40% {
+    left: -12%;
+  }
+
+  50% {
+    left: -10%;
+  }
+
+  60% {
+    left: -8%;
+  }
+
+  70% {
+    left: -6%;
+  }
+
+  80% {
+    left: -4%;
+  }
+
+  90% {
+    left: -2%;
+  }
+
+  100% {
+    left: 0%;
+  }
+}
+
+/* this is animation for  danger message  */
+@keyframes ltor {
+  0% {
+    left: 98%;
+  }
+
+  10% {
+    left: 96%;
+  }
+
+  20% {
+    left: 94%;
+  }
+
+  30% {
+    left: 92%;
+  }
+
+  40% {
+    left: 90%;
+  }
+
+  50% {
+    left: 88%;
+  }
+
+  60% {
+    left: 86%;
+  }
+
+  70% {
+    left: 84%;
+  }
+
+  80% {
+    left: 82%;
+  }
+
+  90% {
+    left: 80%;
+  }
+
+  100% {
+    left: 80%;
+  }
+}
+
+/* this css for home page  */
+.notebox {
+  width: 100%;
+  height: 89.5vh;
+  display: flex;
+  align-items: center;
+  z-index: 2;
+  opacity: 2;
+}
+
+.noteinfor {
+  padding: 40px;
+  width: 50%;
+  min-height: 40%;
+  border-radius: 15px;
+  border-top-right-radius: 25%;
+  background: #e6e6fa;
+  color: black;
+  opacity: 0.9;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: auto;
+}
+
+.noteinfor .infor {
+  width: 80%;
+  font-weight: bold;
+  padding: 10px;
+  font-family: Arial;
+  letter-spacing: 1.2px;
+  line-height: 30px;
+}
+
+.noteinfor h1 {
+  text-align: center;
+  width: 80%;
+  font-family: "Times New Roman";
+  font-size: 35px;
+  letter-spacing: 1px;
+}
+
+/* this css for login and signup page  -----------------------------------------------------------------------------------------------*/
+
+#signupbtn,
+#loginbtn,
+#signout {
+  padding: 10px;
+  width: 120%;
+  background-color: #fff;
+  color: black;
+  box-shadow: 3px 3px 0 black;
+  transform: skewX(-5deg);
+  font-weight: bold;
+  transition: 0.3s;
+  border: 2px solid rgb(68, 59, 59);
+}
+#signupbtn:hover,
+#loginbtn:hover,
+#signout:hover {
+  box-shadow: 6px 6px 0 black;
+  transform: skewX(-15deg);
+}
+
+#sign,
+#log,
+#lout {
+  width: 12%;
+}
+
+#profilelogo,
+#signuplogo {
+  width: 30%;
+  border-radius: 30px;
+  background-color: aliceblue;
+  text-align: center;
+  display: block;
+  margin: auto;
+  color: tan;
+  font-size: 85px;
+  position: relative;
+  /* top: -30px; */
+}
+
+#loginform,
+#signupform {
+  position: relative;
+  top: 10%;
+  background-color: black;
+  opacity: 0.8;
+  color: aliceblue;
+  box-shadow: 4px 4px 2px rgb(68, 59, 59);
+  border-top-left-radius: 50px;
+  border-bottom-right-radius: 50px;
+  padding: 4% 0px;
+  width: 35%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#signupform {
+  top: 5%;
+}
+
+#loginform h3 {
+  font-size: 30px;
+}
+
+#emailpass,
+#allinfor {
+  display: flex;
+  flex-direction: column;
+  width: 78%;
+  margin-top: 15px;
+}
+
+#emailpass #submit,
+#allinfor #submit {
+  width: 30%;
+  border: none;
+  margin-top: 5%;
+  background-color: chocolate;
+  box-shadow: 2px 2px 2px white;
+}
+
+#emailpass #submit:hover,
+#allinfor #submit:hover {
+  background-color: white;
+  color: black;
+  box-shadow: 2px 2px 2px chocolate;
+}
+
+.impstar {
+  color: red;
+}
+
+#emaillabel,
+#passlabel,
+#allinfor label {
+  font-weight: bold;
+}
+
+#emailfont,
+#passfont,
+#namefonts,
+#emailfonts,
+#passfonts,
+#cpassfonts {
+  display: flex;
+  cursor: pointer;
+  color: black;
+}
+
+#emailfont input,
+#passfont input,
+#allinfor input {
+  width: 100%;
+}
+
+#emailfont i,
+#passfont i,
+#namefonts i,
+#emailfonts i,
+#passfonts i,
+#cpassfonts i {
+  position: relative;
+  top: 11px;
+  left: -33px;
+}
+
+/* this css for notes page  */
+#notebooks {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  top: 4%;
+  width: 100%;
+}
+#notebooks h1 {
+  font-size: 35px;
+}
+
+#noteinput {
+  width: 30%;
+}
+#noteinput div .form-label {
+  width: 100%;
+  font-weight: bolder;
+  text-align: center;
+}
+
+#disc {
+  height: 100px;
+}
+#notesubmit {
+  display: block;
+  margin: auto;
+  background: #fff;
+  border: rgba(112, 111, 211, 0);
+  width: 35%;
+  opacity: 0.8;
+  border-radius: 30px;
+  font-weight: bold;
+  color: black;
+  height: 50px;
+}
+#notesubmit:focus {
+  color: #706fd3;
+  border: 2px solid rgba(112, 111, 211, 1);
+  box-shadow: 0px 0px 0px 1px rgb(58, 57, 110);
+  animation: btnfocus 0, 3s forwards;
+}
+
+@keyframes btnfocus {
+  100% {
+    box-shadow: 0px 0px 50px 20px rgba(112, 111, 211, 0);
+  }
+}
+
+#notedisplay {
+  position: relative;
+  top: 10%;
+}
+
+/* this css for index for responsiveness */
+
+@media screen and (max-width: 700px) {
+  .notebox {
+    height: 88vh;
+  }
+
+  #boxs {
+    width: 110%;
+  }
+
+  #signupbtn,
+  #loginbtn {
+    padding: 5px;
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 550px) {
+  #boxs {
+    width: 120%;
+  }
+
+  #signupbtn,
+  #loginbtn {
+    padding: 3px;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .noteinfor {
+    width: 90%;
+  }
+  #mynotes {
+    text-align: center;
+    width: 100%;
+  }
+
+  #sign,
+  #log {
+    width: 25%;
+  }
+}
+
+/* this css for login for responsiveness */

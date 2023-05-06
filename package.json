@@ -1,0 +1,29 @@
+{
+  "name": "keepernotes",
+  "version": "1.0.0",
+  "description": "this is my note app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
+  },
+  "author": "DHAVAL HADIYA",
+  "license": "ISC",
+  "engines": {
+    "node": "14.20.1"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "check-password-strength": "^2.0.7",
+    "crypto-js": "^4.1.1",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.0",
+    "mongoose": "^7.0.3",
+    "path": "^0.12.7",
+    "validator": "^13.9.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  }
+}

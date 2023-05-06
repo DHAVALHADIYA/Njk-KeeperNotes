@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Sofia">
+  <link rel="stylesheet" type="text/css" href="./notecss/index.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <title>NoteBook's Store Securely</title>
+  <style>
+    body::before {
+      content: "";
+      background: url(./notecss/bgnotes.jpg) no-repeat center/cover;
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 250vh;
+      z-index: -1;
+      opacity: 0.9;
+    }
+
+    @media screen and (max-width: 500px) {
+
+      #mynotes {
+        text-align: center;
+        width: 30%;
+        padding: 10px;
+        font-size: 20px;
+        margin: 0 30px;
+      }
+
+      #lout {
+        width: 30%;
+      }
+
+      #signout {
+        width: 100%;
+      }
+
+      #notebooks {
+        width: 95%;
+        top: 5%;
+        padding: 1%;
+      }
+
+      #noteinput {
+        width: 76%;
+      }
+
+      #notesubmit {
+        width: 45%;
+        margin-top: 10%;
+      }
+
+      #successsignup {
+        display: none;
+        position: relative;
+        left: -20%;
+        top: 4rem;
+        width: 80%;
+        animation: rtol;
+        animation-duration: 1s;
+        animation-delay: 0.12s;
+        animation-timing-function: linear;
+        transition: all 100s;
+        animation-fill-mode: forwards;
+      }
+
+      #dangersignup {
+        top: 4rem;
+        width: 50%;
+      }
+
+      #notedisplay {
+        top: 7%;
+        width: 80%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="nav">
+    <div class="container-fluid" id="navbar">
+      <p class="navbar-brand text-light" id="mynotes">My Notes</p>
+      <div class="d-flex" id="lout">
+        <button class="btn btn-secondary mx-2" type="submit" id="signout">Log Out</button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container" id="notebooks">
+    <h1 class="text-center my-4">Welcome <span id="showname"></span></h1>
+    <h1 class="my-4 text-center">add a notes</h1>
+    <div id="noteinput">
+      <div class="mb-3">
+        <label for="title" class="form-label">title</label>
+        <input type="text" class="form-control" id="title" aria-describedby="emailHelp">
+      </div>
+      <div class="mb-3">
+        <label for="disc" class="form-label">description</label>
+        <textarea type="text" class="form-control" id="disc"></textarea>
+      </div>
+      <button id="notesubmit" type="submit" class="btn btn-primary">Submit</button>
+    </div>
+  </div>
+
+  <div class="alert alert-success text-center" id="successnote">
+  </div>
+  <!-- <div class="alert alert-danger text-center" id="dangernotes">
+  </div> -->
+  <div class="container" id="notedisplay">
+    <h1 class="my-4 text-center">your notes</h1>
+    <div class="mynotes row">
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+
+    // here fetch api is used for pass data and get data
+    async function postData(url = "", data = {}) {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        redirect: "follow",
+        referrerPolicy: "no-referrer",
+        body: JSON.stringify(data),
+      });
+      let rdata = await response.json();
+      return rdata;
+    }
+
+    // fetch all the notes here 
+    const fetchnotes = () => {
+      const user = JSON.parse(localStorage.getItem("user"));
+      const showname = document.getElementById("showname");
+
+      if (user && user.tokenkey) {
+        let notecontainer = document.querySelector(".mynotes");
+        notecontainer.innerHTML = "";
+        showname.innerText = JSON.parse(localStorage.getItem("user")).name;
+        const notes = postData("/getnote", { tokenkey: user.tokenkey });
+        notes.then((notes) => {
+          notes.notes.forEach(element => {
+            let note = ` <div class="card mx-3 my-3" style="width: 25rem; height : 15rem;">
+          <div class="card-body">
+          <h6 class="card-title" style="margin:10px 0px;">Title : ${element.title}</h>
+          <p class="card-text" style= "overflow : auto; margin:10px 0px;  height : 70px">Discription : ${element.description}</p>
+          <button class="card-link" style = "margin:15% 30%; width:100px ; height:30px;" onclick="handleclick('${element._id}')">Delete</button>
+          </div>
+          </div>`
+            notecontainer.innerHTML += note;
+          });
+        });
+      }
+      else {
+        successnotes.innerText = "you are not valid user please login first";
+        successnotes.style.display = "block";
+        window.location = "/login";
+      }
+
+    }
+    fetchnotes();
+
+    // delete the notes 
+    async function handleclick(id) {
+      let permission = confirm("are you sure to delete this note?");
+      if (permission) {
+        let res = await postData("/deletenote", { id });
+        if (res.success) {
+          successnotes.innerText = "notes deleted successfully";
+          successnotes.style.display = "block";
+          setTimeout(() => {
+            successnotes.style.display = "none";
+          }, 3000);
+          fetchnotes();
+        }
+      }
+    }
+
+
+    // submit the notes 
+    let submit = document.getElementById("notesubmit");
+    submit.addEventListener("click", async () => {
+      let title = document.getElementById("title").value;
+      let description = document.getElementById("disc").value;
+      let tokenkey = JSON.parse(localStorage.getItem("user"))?.tokenkey;
+
+      let res = await postData("/addnote", { title, description, tokenkey, name });
+      if (res.success) {
+        successnotes.innerText = "notes created successfully";
+        successnotes.style.display = "block";
+        setTimeout(() => {
+          successnotes.style.display = "none";
+        }, 3000);
+        document.getElementById("title").value = "";
+        document.getElementById("disc").value = "";
+        fetchnotes();
+      }
+      else {
+        alert(res.message);
+      }
+    });
+
+    //  signout here 
+    const signout = document.getElementById("signout");
+    const successnotes = document.getElementById("successnote");
+    signout.addEventListener("click", () => {
+      localStorage.removeItem("user");
+      successnotes.innerText = "Your Account Logout Successfully";
+      successnotes.style.display = "block";
+      setTimeout(() => {
+        window.location = "/login";
+      }, 2000);
+    });
+  </script>
+
+</body>
+</html>

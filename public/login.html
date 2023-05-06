@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="./notecss/index.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <title>Login | NoteBook</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body::before {
+      content: "";
+      background: url(./notecss/bg.jpg) no-repeat center/cover;
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100vh;
+      z-index: -1;
+      opacity: 1;
+    }
+
+    @media screen and (max-width: 500px) {
+
+      #mynotes {
+        text-align: center;
+        width: 30%;
+        padding: 10px;
+        font-size: 20px;
+        margin: 0 30px;
+      }
+
+      #loginbtn {
+        width: 100%;
+      }
+
+      #loginform {
+        width: 95%;
+      }
+
+      #profilelogo {
+        width: 45%;
+      }
+
+      #emailpass #submit {
+        width: 50%;
+      }
+
+      #successlogin {
+        display: none;
+        position: relative;
+        left: -20%;
+        top: 8rem;
+        width: 80%;
+        animation: rtol;
+        animation-duration: 1s;
+        animation-delay: 0.12s;
+        animation-timing-function: linear;
+        transition: all 100s;
+        animation-fill-mode: forwards;
+      }
+
+      #dangerlogin {
+        top: 10rem;
+        width: 50%;
+      }
+    }
+  </style>
+
+</head>
+<body>
+
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="nav">
+    <div class="container-fluid">
+      <p class="navbar-brand" id="mynotes">MyNotes</p>
+      <div class="d-flex" id="sign">
+        <a href="/signup"><button class="btn btn-outline-success mx-2 " id="loginbtn" type="submit">Sign
+            Up</button></a>
+      </div>
+    </div>
+  </nav>
+
+
+  <div class="container" id="loginform">
+    <i class="fa-regular fa-user" id="profilelogo"></i>
+    <h3 class="my-4 text-center">Welcome Back <span id="nameofuser"></span></h3>
+    <div id="emailpass">
+      <label for="email" class="form-label" id="emaillabel">Email address<span class="impstar">*</span></label>
+      <div class="mb-3" id="emailfont">
+        <input type="email" class="form-control input-field" id="email" aria-describedby="emailHelp">
+        <i class="fa-sharp fa-regular fa-envelope"></i>
+      </div>
+      <label for="password" class="form-label" class="passlabel">Password<span class="impstar">*</span></label>
+      <div class="mb-3" id="passfont">
+        <input type="password" class="form-control" id="password">
+        <i class="fa-sharp fa-solid fa-eye-slash" id="passtoggle"></i>
+      </div>
+      <button id="submit" type="submit" class="btn btn-primary">LOG IN</button>
+    </div>
+  </div>
+
+  <div class="alert alert-success text-center" id="successlogin">
+  </div>
+
+  <div class="alert alert-danger text-center" id="dangerlogin">
+  </div>
+
+
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+
+
+  <script>
+    const submit = document.getElementById("submit");
+    const successlogin = document.getElementById("successlogin");
+    const dangerlogin = document.getElementById("dangerlogin");
+
+    const passtoggle = document.getElementById("passtoggle");
+    const password = document.getElementById("password");
+
+    // here fetch api is used for pass data and get data 
+    async function postData(url = "", data = {}) {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        redirect: "follow",
+        referrerPolicy: "no-referrer",
+        body: JSON.stringify(data),
+      });
+      let rdata = await response.json();
+      return rdata;
+    }
+
+
+    // submit the data 
+    submit.addEventListener("click", async () => {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      if (email.length != 0 && password.length != 0) {
+        let res = await postData("/login", { email, password });
+        if (res.success) {
+          successlogin.innerText = "Congratulation Login Successfull";
+          successlogin.style.display = "block";
+          localStorage.setItem("user", JSON.stringify(res.user));
+          document.getElementById("email").value = "";
+          document.getElementById("password").value = "";
+          setTimeout(() => {
+            window.location.href = 'notes.html';
+          }, 3000);
+        }
+        else {
+          dangerlogin.innerText = res.message;
+          dangerlogin.style.display = "block";
+          setTimeout(() => {
+            dangerlogin.style.display = "none";
+          }, 3000);
+        }
+      }
+      else {
+        dangerlogin.innerText = "fill all the details";
+        dangerlogin.style.display = "block";
+        setTimeout(() => {
+          dangerlogin.style.display = "none";
+        }, 3000);
+      }
+    });
+
+
+
+    // this  is for toggle password show and hide 
+    passtoggle.addEventListener("click", function () {
+      // check the type of attribues 
+      const type = password.getAttribute("type") === "password" ? "text" : "password";
+      password.setAttribute("type", type);
+
+      // toggle the icon
+      this.classList.toggle("bi-eye");
+    });
+
+  </script>
+
+
+</body>
+</html>

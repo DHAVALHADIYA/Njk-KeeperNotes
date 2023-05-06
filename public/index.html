@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="./notecss/index.css">
+    <link rel="stylesheet" href="./notecss/index.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Kepper's Note - Keep Your Secure Note Here</title>
+
+    <style>
+        body::before {
+            content: "";
+            background: url(./notecss/bg.jpg) no-repeat center/cover;
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: -1;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="nav">
+        <div class="container-fluid" id="navbar">
+            <p class="navbar-brand text-light" id="mynotes">My Notes</p>
+        </div>
+    </nav>
+
+    <div class="notebox">
+        <div class="noteinfor">
+            <h1>welcome to keeper notes</h1>
+            <p class="infor">here you can securely store importants notes whenever you want. this is helpfull for store
+                a secure data with authentications.</p>
+            <div id="boxs">
+                <a href="/login"><button id="loginbtn" class="btn btn-light mx-2 " type="submit">login</button></a>
+                <a href="/signup"><button id="signupbtn" class="btn btn-light mx-2 " type="submit">signup</button></a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/ionicons@5.4.0/dist/ionicons.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
