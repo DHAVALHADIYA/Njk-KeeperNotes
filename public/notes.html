@@ -136,6 +136,7 @@
 
     // fetch all the notes here 
     const fetchnotes = () => {
+
       const user = JSON.parse(localStorage.getItem("user"));
       const showname = document.getElementById("showname");
 
@@ -143,24 +144,27 @@
         let notecontainer = document.querySelector(".mynotes");
         notecontainer.innerHTML = "";
         showname.innerText = JSON.parse(localStorage.getItem("user")).name;
-        const notes = postData("/getnote", { tokenkey: user.tokenkey });
-        notes.then((notes) => {
-          notes.notes.forEach(element => {
-            let note = ` <div class="card mx-3 my-3" style="width: 25rem; height : 15rem;">
+        const data = postData("/getnote", { tokenkey: user.tokenkey });
+        if (data) {
+          data.then((data) => {
+            if (data.notes.length != 0) {
+              data.notes.forEach(element => {
+                let note = ` <div class="card mx-3 my-3" style="width: 25rem; height : 15rem;">
           <div class="card-body">
           <h6 class="card-title" style="margin:10px 0px;">Title : ${element.title}</h>
           <p class="card-text" style= "overflow : auto; margin:10px 0px;  height : 70px">Discription : ${element.description}</p>
           <button class="card-link" style = "margin:15% 30%; width:100px ; height:30px;" onclick="handleclick('${element._id}')">Delete</button>
           </div>
           </div>`
-            notecontainer.innerHTML += note;
+                notecontainer.innerHTML += note;
+              });
+            }
           });
-        });
+        }
       }
       else {
-        dangernotes.innerText = "you are not valid user please login first";
+        dangernotes.innerText = "You are not valid user , login first";
         dangernotes.style.display = "block";
-        window.location = "/login";
       }
 
     }
@@ -168,11 +172,11 @@
 
     // delete the notes 
     async function handleclick(id) {
-      let permission = confirm("are you sure to delete this note?");
+      let permission = confirm("Are you sure want to delete this note?");
       if (permission) {
         let res = await postData("/deletenote", { id });
         if (res.success) {
-          successnotes.innerText = "notes deleted successfully";
+          successnotes.innerText = res.message;
           successnotes.style.display = "block";
           setTimeout(() => {
             successnotes.style.display = "none";
@@ -186,23 +190,33 @@
     // submit the notes 
     let submit = document.getElementById("notesubmit");
     submit.addEventListener("click", async () => {
+
       let title = document.getElementById("title").value;
       let description = document.getElementById("disc").value;
       let tokenkey = JSON.parse(localStorage.getItem("user"))?.tokenkey;
 
-      let res = await postData("/addnote", { title, description, tokenkey, name });
-      if (res.success) {
-        successnotes.innerText = "notes created successfully";
-        successnotes.style.display = "block";
-        setTimeout(() => {
-          successnotes.style.display = "none";
-        }, 3000);
-        document.getElementById("title").value = "";
-        document.getElementById("disc").value = "";
-        fetchnotes();
+      if (title.length != 0 && description.length != 0) {
+        let res = await postData("/addnote", { title, description, tokenkey, name });
+        if (res) {
+          successnotes.innerText = res.message;
+          successnotes.style.display = "block";
+          setTimeout(() => {
+            successnotes.style.display = "none";
+          }, 3000);
+          document.getElementById("title").value = "";
+          document.getElementById("disc").value = "";
+          fetchnotes();
+        }
+        else {
+          dangernotes.innerText = res.message;
+          dangernotes.style.display = "block";
+          setTimeout(() => {
+            dangernotes.style.display = "none";
+          }, 3000);
+        }
       }
       else {
-        dangernotes.innerText = res.message;
+        dangernotes.innerText = "Fill the Notes";
         dangernotes.style.display = "block";
         setTimeout(() => {
           dangernotes.style.display = "none";

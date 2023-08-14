@@ -145,34 +145,43 @@
       const password = document.getElementById("password").value;
       const cpassword = document.getElementById("cpassword").value;
 
-      if (name.length != 0 && email.length != 0 && password.length != 0 && cpassword.length != 0) {
-        let res = await postData("/signup", { name, email, password, cpassword });
-        if (res.success) {
-          successsignup.style.display = "block";
-          localStorage.setItem("user", JSON.stringify(res.user));
-          document.getElementById("name").value = "";
-          document.getElementById("email").value = "";
-          document.getElementById("password").value = "";
-          document.getElementById("cpassword").value = "";
-          setTimeout(() => {
-            window.location.href = 'notes.html';
-          }, 3000);
+      try {
+        if (name.length != 0 && email.length != 0 && password.length != 0 && cpassword.length != 0) {
+          let res = await postData("/signup", { name, email, password, cpassword });
+          if (res.success) {
+            successsignup.style.display = "block";
+            localStorage.setItem("user", JSON.stringify(res.user));
+            document.getElementById("name").value = "";
+            document.getElementById("email").value = "";
+            document.getElementById("password").value = "";
+            document.getElementById("cpassword").value = "";
+            setTimeout(() => {
+              window.location.href = 'notes.html';
+            }, 3000);
+          }
+          else {
+            dangersignup.innerText = res.message;
+            dangersignup.style.display = "block";
+            setTimeout(() => {
+              dangersignup.style.display = "none";
+            }, 5000);
+          }
         }
         else {
-          dangersignup.innerText = res.message;
+          dangersignup.innerText = "fill all the details";
           dangersignup.style.display = "block";
           setTimeout(() => {
             dangersignup.style.display = "none";
-          }, 5000);
+          }, 3000);
         }
-      }
-      else {
-        dangersignup.innerText = "fill all the details";
+      } catch (error) {
+        dangersignup.innerText = error.message;
         dangersignup.style.display = "block";
         setTimeout(() => {
           dangersignup.style.display = "none";
         }, 3000);
       }
+
     });
 
   </script>

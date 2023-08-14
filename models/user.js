@@ -17,8 +17,7 @@ const userschema = mongoose.Schema(
       unique: true,
       validate(email) {
         if (!validator.isEmail(email)) {
-          throw new Error("this is not valid email");
-          // console.log("error");
+          throw new Error("This is not valid email");
         }
       },
     },
@@ -52,10 +51,7 @@ userschema.methods.generatetokenkey = async function (key) {
     await this.save();
     return tokenkey;
   } catch (err) {
-    console.log(
-      "there will be some error to create a jsonwebtoken you can try another.",
-      err
-    );
+    return err;
   }
 };
 

@@ -2,14 +2,18 @@
 
 const dotenv = require("dotenv");
 dotenv.config();
+
 const express = require("express");
 const path = require("path");
 const mongoose = require("mongoose");
+
 const note = require("./models/note");
 const User = require("./models/user");
+
 const dcrypt = require("bcryptjs");
-const { log } = require("console");
+
 const { passwordStrength } = require("check-password-strength");
+
 const app = express();
 const port = process.env.PORT || 7000;
 
@@ -43,17 +47,9 @@ app.get("/login", (req, res) => {
 app.get("/signup", (req, res) => {
   res.sendFile(signup_file);
 });
+
 app.get("/*", (req, res) => {
   res.sendFile(error_file);
-});
-
-app.post("/getnote", async (req, res) => {
-  try {
-    let notes = await note.find({ tokenkey: req.body.tokenkey });
-    res.status(200).json({ success: true, notes });
-  } catch (err) {
-    res.status(200).json({ success: false, message: "you are not valid user" });
-  }
 });
 
 app.post("/login", async (req, res) => {
@@ -62,25 +58,28 @@ app.post("/login", async (req, res) => {
     if (user) {
       const passcheck = await dcrypt.compare(req.body.password, user.password);
       if (passcheck) {
-        res.status(200).json({
+        res.status(201).json({
           success: true,
           user: { tokenkey: user.tokenkey, name: user.name },
-          message: "user is found",
+          message: "Login successfully..",
         });
       } else {
-        res.status(200).json({
+        res.status(401).json({
           success: false,
           message: "password is not correct",
         });
       }
     } else {
-      res.status(200).json({
+      res.status(404).json({
         success: false,
-        message: "email is not found",
+        message: "Email is not found",
       });
     }
   } catch (err) {
-    console.log(err);
+    res.status(500).json({
+      success: false,
+      message: "Error in login , Try after some time",
+    });
   }
 });
 
@@ -88,33 +87,62 @@ app.post("/signup", async (req, res) => {
   try {
     let checkpass = passwordStrength(req.body.password).value;
     if (checkpass == "Strong") {
-      if (req.body.password == req.body.cpassword) {
-        let user = await User.create(req.body);
-        let key = user.password;
-        const tokenkey = await user.generatetokenkey(key);
-        res.status(200).json({
-          success: true,
-          user: { tokenkey: user.tokenkey, name: user.name },
-        });
+      let user = await User.findOne({ email: req.body.email });
+      if (!user) {
+        if (req.body.password == req.body.cpassword) {
+          let user = await User.create(req.body);
+          let key = user.password;
+          const tokenkey = await user.generatetokenkey(key);
+          res.status(200).json({
+            success: true,
+            user: { tokenkey: user.tokenkey, name: user.name },
+            message: "Signup Successfully...",
+          });
+        } else {
+          res.status(401).json({
+            success: false,
+            message: "The password and confirm password is not match",
+          });
+        }
       } else {
-        res.status(200).json({
+        res.status(409).json({
           success: false,
-          message: "the password and confirm password is not same",
+          message: "Email already registered",
         });
       }
     } else {
-      res.status(200).json({
+      res.status(400).json({
         success: false,
         message:
           "pass is " +
           checkpass +
-          "set strong pass which has lower & upper case, number & special char",
+          " set strong pass which has lower & upper case, number & special char",
       });
     }
   } catch (err) {
-    res.status(200).json({
+    res.status(500).json({
       success: false,
-      message: `${err}`,
+      message: "Error in Registration , Try after some time",
+    });
+  }
+});
+
+app.post("/getnote", async (req, res) => {
+  try {
+    let notes = await note.find({ tokenkey: req.body.tokenkey });
+    if (notes) {
+      if (notes.length != 0) {
+        res.status(200).json({
+          success: true,
+          notes,
+          message: "Notes access successfully..",
+        });
+      }
+    }
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: "Error in accessing notes , try after some times",
     });
   }
 });
@@ -124,24 +152,35 @@ app.post("/addnote", async (req, res) => {
     let tokenkey = await User.findOne({ tokenkey: req.body.tokenkey });
     if (tokenkey) {
       let notes = await note.create(req.body);
-      res.status(200).json({ success: true, notes });
+      res
+        .status(200)
+        .json({ success: true, notes, message: "Notes Added Successfully..." });
     } else {
-      res.status(200).json({
+      res.status(401).json({
         success: false,
-        message: "you are not valid user please login now",
+        message: "You are not valid user please login now",
       });
     }
   } catch (err) {
-    console.log("note is not added due to", err);
+    res.status(200).json({
+      success: false,
+      message: "Error to adding notes , try after sometime",
+    });
   }
 });
 
 app.post("/deletenote", async (req, res) => {
   try {
     let notes = await note.findByIdAndRemove(req.body.id);
-    res.status(200).json({ success: true, notes });
+    res
+      .status(200)
+      .json({ success: true, notes, message: "Notes deleted successfully.." });
   } catch (err) {
-    console.log("error to deleted node due to", err);
+    res.status(500).json({
+      success: false,
+      notes,
+      message: "Error to deleting notes , try after sometime",
+    });
   }
 });
 

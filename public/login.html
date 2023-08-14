@@ -171,28 +171,38 @@
       const email = document.getElementById("email").value;
       const password = document.getElementById("password").value;
 
-      if (email.length != 0 && password.length != 0) {
-        let res = await postData("/login", { email, password });
-        if (res.success) {
-          successlogin.innerText = "Congratulation Login Successfull";
-          successlogin.style.display = "block";
-          localStorage.setItem("user", JSON.stringify(res.user));
-          document.getElementById("email").value = "";
-          document.getElementById("password").value = "";
-          setTimeout(() => {
-            window.location.href = 'notes.html';
-          }, 3000);
+      try {
+        if (email.length != 0 && password.length != 0) {
+
+          let res = await postData("/login", { email, password });
+
+          if (res.success) {
+            successlogin.innerText = res.message;
+            successlogin.style.display = "block";
+            localStorage.setItem("user", JSON.stringify(res.user));
+            document.getElementById("email").value = "";
+            document.getElementById("password").value = "";
+            setTimeout(() => {
+              window.location.href = 'notes.html';
+            }, 3000);
+          }
+          else {
+            dangerlogin.innerText = res.message;
+            dangerlogin.style.display = "block";
+            setTimeout(() => {
+              dangerlogin.style.display = "none";
+            }, 3000);
+          }
         }
         else {
-          dangerlogin.innerText = res.message;
+          dangerlogin.innerText = "Fill all the details";
           dangerlogin.style.display = "block";
           setTimeout(() => {
             dangerlogin.style.display = "none";
           }, 3000);
         }
-      }
-      else {
-        dangerlogin.innerText = "fill all the details";
+      } catch (error) {
+        dangerlogin.innerText = error.message;
         dangerlogin.style.display = "block";
         setTimeout(() => {
           dangerlogin.style.display = "none";
@@ -209,7 +219,7 @@
       password.setAttribute("type", type);
 
       // toggle the icon
-      this.classList.toggle("bi-eye");
+      // this.classList.toggle("bi-eye");
     });
 
   </script>
