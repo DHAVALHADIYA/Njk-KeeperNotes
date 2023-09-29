@@ -184,6 +184,24 @@ app.post("/deletenote", async (req, res) => {
   }
 });
 
+app.post("/updatenote", async (req, res) => {
+  try {
+    let { id, title, description } = req.body;
+    let notes = await note.updateOne(
+      { _id: id },
+      { $set: { title: title, description: description } }
+    );
+    res
+      .status(200)
+      .json({ success: true, notes, message: "Notes update successfully.." });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: "Error to update notes , try after sometime",
+    });
+  }
+});
+
 app.listen(port, () => {
   console.log(` server listening on port http://localhost:${port}`);
 });
